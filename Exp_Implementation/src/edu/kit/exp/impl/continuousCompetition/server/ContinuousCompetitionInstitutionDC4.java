@@ -20,6 +20,7 @@ public class ContinuousCompetitionInstitutionDC4 extends ContinuousCompetitionIn
         isCournotTreatment = true;
         isDiscreteTreatment = true;
         isQuadropolyTreatment = true;
+        isDecisionSupport = false;
         duration = 900000;
         updateTimeStep = 15000;
     }

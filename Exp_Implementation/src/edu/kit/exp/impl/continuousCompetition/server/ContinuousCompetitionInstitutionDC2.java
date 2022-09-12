@@ -19,6 +19,7 @@ public class ContinuousCompetitionInstitutionDC2 extends ContinuousCompetitionIn
         isTriopolyTreatment = false;
         isCournotTreatment = true;
         isDiscreteTreatment = true;
+        isDecisionSupport = false;
         duration = 900000;
         updateTimeStep = 15000;
     }

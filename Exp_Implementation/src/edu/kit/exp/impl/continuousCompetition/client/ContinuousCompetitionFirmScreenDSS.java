@@ -16,6 +16,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,9 +26,9 @@ import java.util.List;
 /**
  * Created by dschnurr on 06.03.14.
  */
-public class ContinuousCompetitionFirmScreen extends Screen {
+public class ContinuousCompetitionFirmScreenDSS extends Screen {
 
-    private static final Logger log4j = LogManager.getLogger(ContinuousCompetitionFirmScreen.class.getName());
+    private static final Logger log4j = LogManager.getLogger(ContinuousCompetitionFirmScreenDSS.class.getName());
 
     boolean isDiscreteTreatment = false;
     boolean isCournotTreatment;
@@ -60,6 +62,8 @@ public class ContinuousCompetitionFirmScreen extends Screen {
     protected double qFirmB;
     protected double qFirmC;
 
+    protected int pDS;
+
     protected double pMarket;
     protected double qMarket;
 
@@ -74,6 +78,8 @@ public class ContinuousCompetitionFirmScreen extends Screen {
     protected boolean FirmCOutOfMarket = false;
 
     protected ContinuousCompetitionParamObject latestMarketUpdate;
+
+    protected AgentStrategy agentStrategy;
 
     protected JSlider pFirmASlider;
     protected JSlider pFirmBSlider;
@@ -96,6 +102,10 @@ public class ContinuousCompetitionFirmScreen extends Screen {
     protected JLabel pFirmADescriptionLabel;
     protected JLabel pFirmAValueLabel;
     protected JLabel pFirmAUnitLabel;
+    protected JLabel DecisionSupportLabel;
+    protected JLabel DecisionSupportValueLabel;
+    protected JLabel DecisionSupportUnitLabel;
+
 
     protected JLabel pFirmBDescriptionLabel;
     protected JLabel pFirmBValueLabel;
@@ -142,6 +152,7 @@ public class ContinuousCompetitionFirmScreen extends Screen {
 
     protected JPanel headerPanel;
     protected JPanel retailPricingPanel;
+    protected JPanel decisionSupportPanel;
     protected JPanel retailPricingTextDisplayPanel;
     protected JPanel retailPricingFirmAPanel;
     protected JPanel retailPricingFirmBPanel;
@@ -225,9 +236,9 @@ public class ContinuousCompetitionFirmScreen extends Screen {
      *                   entry at server side.
      * @param showUpTime
      */
-    public ContinuousCompetitionFirmScreen(String gameId, ContinuousCompetitionParamObject parameter, String screenId, Long showUpTime) {
+    public ContinuousCompetitionFirmScreenDSS(String gameId, ContinuousCompetitionParamObject parameter, String screenId, Long showUpTime) {
         super(gameId, parameter, screenId, showUpTime);
-        log4j.trace("Start constructor ContinuousCompetitionFirmScreen()");
+        log4j.trace("Start constructor ContinuousCompetitionFirmScreenDSS()");
 
         this.isTriopolyTreatment = parameter.isTriopolyTreatment();
         this.isCournotTreatment = parameter.isCournotTreatment();
@@ -258,7 +269,7 @@ public class ContinuousCompetitionFirmScreen extends Screen {
 
         marketDataCalculator = new ContinuousCompetitionMarketDataCalculator(diffParam, isCournotTreatment, isTriopolyTreatment);
 
-        log4j.info("Started ContinuousCompetitionFirmScreen for client {} in cohort {} with diffParam = {}, discreteTreatment = {}, practiceRound = {}, myRole = {}", subject.getIdClient(), subjectGroup.getIdSubjectGroup(), diffParam, isDiscreteTreatment, practiceRound, myRole);
+        log4j.info("Started ContinuousCompetitionFirmScreenDSS for client {} in cohort {} with diffParam = {}, discreteTreatment = {}, practiceRound = {}, myRole = {}", subject.getIdClient(), subjectGroup.getIdSubjectGroup(), diffParam, isDiscreteTreatment, practiceRound, myRole);
 
         initPanel();                                    // default screen size: 1280, 1024
         initWaitingPanel();
@@ -283,7 +294,7 @@ public class ContinuousCompetitionFirmScreen extends Screen {
             sendResponse(readyUpdate);
         }
 
-        log4j.trace("End constructor ContinuousCompetitionFirmScreen()");
+        log4j.trace("End constructor ContinuousCompetitionFirmScreenDSS()");
     }
 
 
@@ -344,7 +355,8 @@ public class ContinuousCompetitionFirmScreen extends Screen {
         priceUpdate.setLocalTime(localTime);
         priceUpdate.setRoleCode(myRoleCode);
 
-        if (practiceRound) { priceUpdate.setPracticeRoundFinished(true); }
+        if (practiceRound) { priceUpdate.setPracticeRoundFinished(true);
+        }
         if (periodFinished) { priceUpdate.setClientFinished(true); }
 
         if (myRole == FirmDescription.FirmA) {
@@ -374,6 +386,7 @@ public class ContinuousCompetitionFirmScreen extends Screen {
         pFirmAValueLabel.setText(String.valueOf(df.format(pFirmA)));
         pFirmBValueLabel.setText(String.valueOf(df.format(pFirmB)));
         pFirmCValueLabel.setText(String.valueOf(df.format(pFirmC)));
+        DecisionSupportValueLabel.setText("n.A.");
     }
 
     // action listeners activated in discrete and practice setting - slider input triggers instant calculation of market data
@@ -536,7 +549,6 @@ public class ContinuousCompetitionFirmScreen extends Screen {
     // action listeners activated in continuous setting - price update is triggered by timer
 
     public void initContinuousActionListeners() {
-
         if (myRole == FirmDescription.FirmA){
             // Activate ActionListeners for Firm A
             pFirmASlider.addChangeListener(new ChangeListener() {
@@ -640,6 +652,7 @@ public class ContinuousCompetitionFirmScreen extends Screen {
             pFirmA = marketUpdate.getaFirmA();
             pFirmB = marketUpdate.getaFirmB();
             pFirmC = marketUpdate.getaFirmC();
+            DecisionSupportValueLabel.setText("n.A.");
         } else {
             if (!practiceRound) {
                 if (myRole == FirmDescription.FirmA) {
@@ -678,23 +691,138 @@ public class ContinuousCompetitionFirmScreen extends Screen {
         updateGUItoParameters(marketUpdate.isInitialUpdate());
     }
 
+    public int[] actionsofotherfirm = new int[3600];
+    private int actionSpace = 21;
+    private double[][] q = new double[actionSpace][actionSpace];
+    private int state;
+    private AgentStrategy.Parameter parameter = new AgentStrategy.Parameter(0.165,0.99);
+    double profitcoefficient = 1.25;
+
+    public int[] storeMarketUpdate (ContinuousCompetitionParamObject marketUpdate) {
+        //Fill array of actions of other firm
+        if (myRole == FirmDescription.FirmA) {
+            actionsofotherfirm[marketUpdate.countId] = marketUpdate.getaFirmB();
+        } else {
+            actionsofotherfirm[marketUpdate.countId] = marketUpdate.getaFirmA();
+        }
+        return actionsofotherfirm;
+    }
+
+    private int getState(ContinuousCompetitionParamObject marketUpdate) {
+        int result = 0;
+        if (isTriopolyTreatment == false) {
+            if (myRole == FirmDescription.FirmA) {
+                result = (int) marketUpdate.getaFirmB();
+            } else if (myRole == FirmDescription.FirmB) {
+                result = (int) marketUpdate.getaFirmA();
+            }
+        }
+        return result;
+    }
+
+    protected int getMaxActionIndex(int state) {
+        double value;
+        double maxValue = 0;
+        int maxIndex = 0;
+
+        for (int i = 0; i < actionSpace; i++) {
+            value = q[state/5][i];
+
+            if (value > maxValue) {
+                maxValue = value;
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
+    }
+
+    void updateMatrix(int action, Double reward, ContinuousCompetitionParamObject marketUpdate) {
+        // Get the new state based on all other firms' actions.
+        int newState = getState(marketUpdate) / 5;
+
+        // Observe maxQ for the new state.
+        double nextMaxQ = q[newState][getMaxActionIndex(newState * 5)];
+
+        // Update corresponding Q-matrix cell but only of current state
+        /*q[state][action] = (1 - parameter.alpha) * q[state][action] + parameter.alpha * (reward + parameter.delta * nextMaxQ);
+        //System.out.println("State: " + state + ", Action: " + action + ", Value: " + q[state][action]);*/
+
+        // Update Q-matrix cell but of maximum action
+        if (marketUpdate.getCountId() > 1) {
+
+            if (getState(marketUpdate) == actionsofotherfirm[marketUpdate.getCountId() - 1]) {
+                q[state / 5][getMaxActionIndex(state)] = (1 - parameter.getAlpha()) * q[state / 5][getMaxActionIndex(state)] +
+                        parameter.getAlpha() * (((getMaxActionIndex(state) * 5) * (60 - 1.8 * (getMaxActionIndex(state) * 5) +
+                                1.2 * (state)) * 1.25) + parameter.getDelta() * nextMaxQ);
+            }
+        }
+    }
+
+    private void initQlearning () {
+        //Here: Q-Learning for Decision Support:
+        String path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";
+        //Reduced QMatrix
+        double[] QMatrix = new double[(actionSpace * actionSpace)];
+        String delimiter = ",";
+        String line;
+
+        //Full QMatrix
+        //for (int i = 0; i<(actionSpace*actionSpace); i++) {
+        //for (int k = 0; k<actionSpace; k++)
+        //Reduced QMatrix
+        for (int i = 0; i < (actionSpace * actionSpace); i++) {
+            for (int k = 0; k < actionSpace; k++)
+                try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+                    while ((line = br.readLine()) != null) {
+
+                        //List values = Arrays.asList(line.split(delimiter));
+                        //lines.add(values);
+                        String[] row = line.split(delimiter);
+                        QMatrix[i] = Double.parseDouble(row[k]);
+                        //System.out.println("i= " + i + " k= " + k + "QMatrix= " + QMatrix[i]);
+                        i++;
+                    }
+
+                    //lines.forEach(l -> System.out.println(l));
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+        }
+
+
+        for (int i = 0; i < q.length; i++) {
+            for (int j = 0; j < q.length; j++) {
+                //Reduced QMatrix
+                //for (int i = 0; i < q.length; i=i+5) {
+                //for (int j = 0; j < q.length; j=j+5) {
+                //Full Matrix with Actionspace * Actionspace
+                q[j][i] = QMatrix[(j % q.length + i * q.length)];
+            }
+        }
+
+    }
+
+
+
+
     private void updateGUItoParameters(boolean isInitialUpdate) {
         log4j.trace("updateGUItoParameters(): start of execution");
         DecimalFormat df = new DecimalFormat("00.00");
         DecimalFormat sdf = new DecimalFormat("00");
 
-
         if (isInitialUpdate) {
+            initQlearning();
             pFirmASlider.setValue(pFirmA);
             pFirmATextField.setText(String.valueOf(pFirmA));
             pFirmBSlider.setValue(pFirmB);
             pFirmBTextField.setText(String.valueOf(pFirmB));
             pFirmCSlider.setValue(pFirmC);
             pFirmCTextField.setText(String.valueOf(pFirmC));
-
+            DecisionSupportValueLabel.setText("n.A.");
         } else {
             if (!practiceRound) {
                 if (myRole == FirmDescription.FirmA) {
+                    updateMatrix(pFirmB, qFirmB*pFirmB*profitcoefficient, latestMarketUpdate);
                     pFirmBSlider.setValue(pFirmB);
                     pFirmBTextField.setText(String.valueOf(pFirmB));
                     pFirmBValueLabel.setText(String.valueOf(sdf.format(pFirmB)));
@@ -704,6 +832,7 @@ public class ContinuousCompetitionFirmScreen extends Screen {
 
                 } else {
                     if (myRole == FirmDescription.FirmB) {
+                        updateMatrix(pFirmA, qFirmA*pFirmA*profitcoefficient, latestMarketUpdate);
                         pFirmASlider.setValue(pFirmA);
                         pFirmATextField.setText(String.valueOf(pFirmA));
                         pFirmAValueLabel.setText(String.valueOf(sdf.format(pFirmA)));
@@ -721,7 +850,11 @@ public class ContinuousCompetitionFirmScreen extends Screen {
                         pFirmBValueLabel.setText(String.valueOf(sdf.format(pFirmB)));
                     }
                 }
+                storeMarketUpdate(latestMarketUpdate);
+                DecisionSupportValueLabel.setText(String.valueOf(getMaxActionIndex(getState(latestMarketUpdate))*5));
             }
+
+
         }
 
         firmAOutOfMarketLabel.setVisible(firmAOutOfMarket);
@@ -934,6 +1067,19 @@ public class ContinuousCompetitionFirmScreen extends Screen {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         backgroundPanel.add(retailPricingPanel, c);
+
+        decisionSupportPanel = new JPanel(new GridBagLayout());
+        decisionSupportPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Vorschlag des Algorithmus"));
+        setPanelSize(decisionSupportPanel, widthRightSide, 270);
+        createDecisionSupportPanel();
+        c.insets = new Insets(5,0,0,0);
+        c.ipadx = 20;
+        c.ipady = 10;
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        backgroundPanel.add(decisionSupportPanel, c);
 
 
         retailPricingTextDisplayPanel = new JPanel(new GridBagLayout());
@@ -1259,6 +1405,30 @@ public class ContinuousCompetitionFirmScreen extends Screen {
         c.insets = new Insets(0,10,0,10);
         c.anchor = GridBagConstraints.LINE_END;
         priceDescriptionDisplayPanel.add(pMarketDescriptionDisplayLabel, c);
+    }
+
+    private void createDecisionSupportPanel(){
+        GridBagConstraints c = new GridBagConstraints();
+        int pady = 13;
+
+        DecisionSupportLabel = createNewDecisionSupportLabel();
+        c = gbcDescriptionColumn(c, pady);
+        c.gridx = 0;
+        c.gridy = 0;
+        decisionSupportPanel.add(DecisionSupportLabel, c);
+
+        DecisionSupportValueLabel = createNewRightSideValueLabel(Color.orange);
+        c = gbcValueColumn(c, pady);
+        c.gridx = 1;
+        c.gridy = 0;
+        decisionSupportPanel.add(DecisionSupportValueLabel, c);
+
+        DecisionSupportUnitLabel = createNewRightSideUnitLabel(Color.orange);
+        DecisionSupportUnitLabel.setText("");
+        c = gbcUnitColumn(c, pady);
+        c.gridx = 2;
+        c.gridy = 0;
+        decisionSupportPanel.add(DecisionSupportUnitLabel, c);
     }
 
     private void createPriceTextDisplayPanel() {
@@ -1744,6 +1914,12 @@ public class ContinuousCompetitionFirmScreen extends Screen {
         JLabel label = new JLabel();
         label.setForeground(COLOR_FIRM_E);
         label.setText("- Firma C");
+        return label;
+    }
+
+    private JLabel createNewDecisionSupportLabel() {
+        JLabel label = createNewRightSideDescriptionLabel(Color.black);
+        label.setText("Empfehlung des Algorithmus:");
         return label;
     }
 

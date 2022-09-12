@@ -31,6 +31,7 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
     protected boolean isTriopolyTreatment;
     protected boolean isCournotTreatment;
     protected boolean isQuadropolyTreatment;
+    protected boolean isDecisionSupport;
 
     protected final double diffParam = (2.0/3.0);
     protected int duration;
@@ -196,7 +197,12 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
             if (isQuadropolyTreatment) {
                 customizeMarketUpdateAndShowScreen(firm, initMarketUpdate, firmDescription, roleCode, ContinuousCompetitionFirmScreenQuadropoly.class);
             } else {
-                customizeMarketUpdateAndShowScreen(firm, initMarketUpdate, firmDescription, roleCode, ContinuousCompetitionFirmScreen.class);
+                if (isDecisionSupport==true) {
+                    customizeMarketUpdateAndShowScreen(firm, initMarketUpdate, firmDescription, roleCode, ContinuousCompetitionFirmScreenDSS.class);
+                }
+                else {
+                    customizeMarketUpdateAndShowScreen(firm, initMarketUpdate, firmDescription, roleCode, ContinuousCompetitionFirmScreen.class);
+                }
             }
         }
     }
@@ -220,7 +226,7 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
         String senderClientId = msg.getClientId();
 
 
-        if ( msgScreenId.equals(ContinuousCompetitionFirmScreen.class.getName()) || msgScreenId.equals(ContinuousCompetitionFirmScreenQuadropoly.class.getName()) || msgScreenId.equals(AgentCore.class.getName()) || msgScreenId.equals(AgentCoreWithGui.class.getName()) ) {
+        if ( msgScreenId.equals(ContinuousCompetitionFirmScreenDSS.class.getName()) ||msgScreenId.equals(ContinuousCompetitionFirmScreen.class.getName()) || msgScreenId.equals(ContinuousCompetitionFirmScreenQuadropoly.class.getName()) || msgScreenId.equals(AgentCore.class.getName()) || msgScreenId.equals(AgentCoreWithGui.class.getName()) ) {
             log4j.trace("Institution received update from " + senderClientId);
             ContinuousCompetitionResponseObject actionUpdate = msg.getParameters();
 
