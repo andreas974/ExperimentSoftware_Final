@@ -759,8 +759,19 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
     }
 
     private void initQlearning () {
-        //Here: Q-Learning for Decision Support:
-        String path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";
+        String path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";        //Here: Q-Learning for Decision Support:
+        if (myRole == FirmDescription.FirmA) {
+            //AverageMatrix
+            //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix21Avg.csv";
+            //Max Matrix:
+            path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmA.csv";
+            //path = "QMatrix_final_with1.0_FirmA.csv";
+            //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrixfull_reduced_with0.998.csv";
+        }
+        else if (myRole == FirmDescription.FirmB){
+            path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";
+        }
+
         //Reduced QMatrix
         double[] QMatrix = new double[(actionSpace * actionSpace)];
         String delimiter = ",";

@@ -517,12 +517,17 @@ public class AgentStrategy {
                 path = "edu/kit/exp/common/resources/SEQ_Q_2_Export.csv";
             }
             else if (!agentCore.isCournotTreatment){
-                //AverageMatrix
-                //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix21Avg.csv";
-                //Max Matrix:
-                path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmA.csv";
-                //path = "QMatrix_final_with1.0_FirmA.csv";
-                //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrixfull_reduced_with0.998.csv";
+                if (myRole==0) {
+                    //AverageMatrix
+                    //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix21Avg.csv";
+                    //Max Matrix:
+                    path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmA.csv";
+                    //path = "QMatrix_final_with1.0_FirmA.csv";
+                    //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrixfull_reduced_with0.998.csv";
+                }
+                else if (myRole==1){
+                    path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";
+                }
 
             }
         }
