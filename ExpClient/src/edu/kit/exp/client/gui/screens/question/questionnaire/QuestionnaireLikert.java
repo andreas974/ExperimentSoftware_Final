@@ -62,7 +62,6 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 	 */
 	public QuestionnaireLikert(String question) {
 		super(question);
-
 		answerText = new ArrayList<>();
 		selectMultiple = false;
 		Text = new ArrayList<>();
@@ -91,9 +90,11 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 
 	@Override
 	public JPanel getAnswerPanel() {
+		this.basePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		JPanel returnPanel = basePanel;
 		returnPanel.setLayout(new BoxLayout(basePanel, BoxLayout.Y_AXIS));
-
+		returnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		returnPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
 
 		JPanel textpanel = new JPanel();
 		returnPanel.add(textpanel);
@@ -102,16 +103,10 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 		textpanel.setBackground(returnPanel.getBackground());
 		textpanel.setPreferredSize(textsize);
 		JTextArea text = new JTextArea();
-		text.insert("Ich stimme voll und ganz zu      Ich stimme zu      Ich stimme weder zu noch lehne ab     Ich stimme nicht zu    Ich stimme überhaupt nicht zu", 0);
+		text.insert("                                                                                                                           Ich stimme voll und ganz zu            Ich stimme zu            Ich stimme weder zu noch lehne ab            Ich stimme nicht zu            Ich stimme überhaupt nicht zu", 0);
 		textpanel.add(text);
 
-		JPanel answerListPanel = new JPanel();
-		returnPanel.add(answerListPanel);
-		answerListPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		answerListPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		answerListPanel.setBackground(returnPanel.getBackground());
-		answerListPanel.setLayout(new BoxLayout(answerListPanel, BoxLayout.X_AXIS));
-		answerListPanel.setPreferredSize(PREFERRED_SIZE);
+
 
 
 		/*answerOption = new ArrayList<>();
@@ -166,32 +161,56 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 		AbstractButton answer3;
 		AbstractButton answer4;
 		AbstractButton answer5;
+		JTextArea QuestionText;
+
 		//ButtonGroup answerGroup = new ButtonGroup();
 
 		for (String anAnswerText : answerText) {
+			JPanel answerListPanel = new JPanel();
+			returnPanel.add(answerListPanel);
+			answerListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+			answerListPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
+			answerListPanel.setBackground(returnPanel.getBackground());
+			answerListPanel.setLayout(new BoxLayout(answerListPanel, BoxLayout.X_AXIS));
+			answerListPanel.setPreferredSize(PREFERRED_SIZE);
+
+			answerListPanel.setMaximumSize(new Dimension(1500,3000));
+			answerListPanel.setPreferredSize(new Dimension(500,3000));
 			ButtonGroup answerGroup = new ButtonGroup();
+			QuestionText = new JTextArea(anAnswerText);
+
+			QuestionText.setMinimumSize(new Dimension(600,20));
+			QuestionText.setMaximumSize(new Dimension(600,20));
+
 			if (selectMultiple) {
-				answer1 = new JCheckBox("<html><br></html>" + anAnswerText, false);
+				answer1 = new JCheckBox("" + anAnswerText, false);
+				answer1.setHorizontalAlignment(JCheckBox.LEFT);
 				answer2 = new JCheckBox("", false);
 				answer3 = new JCheckBox("", false);
 				answer4 = new JCheckBox("", false);
 				answer5 = new JCheckBox("", false);
 			} else {
-				answer1 = new JRadioButton("\n" +anAnswerText + "        ", false);
+				answer1 = new JRadioButton("									1", false);
+				answer1.setForeground(Color.WHITE);
 				answer1.setHorizontalTextPosition(SwingConstants.LEFT);
 				answerGroup.add(answer1);
-				answer2 = new JRadioButton("                   2", false);
+				answer2 = new JRadioButton("									2", false);
+				answer2.setHorizontalTextPosition(SwingConstants.LEFT);
 				answer2.setForeground(Color.WHITE);
 				answerGroup.add(answer2);
-				answer3 = new JRadioButton("                   3", false);
+				answer3 = new JRadioButton("									3", false);
+				answer3.setHorizontalTextPosition(SwingConstants.LEFT);
 				answer3.setForeground(Color.WHITE);
 				answerGroup.add(answer3);
-				answer4 = new JRadioButton("                    4", false);
+				answer4 = new JRadioButton("									4", false);
+				answer4.setHorizontalTextPosition(SwingConstants.LEFT);
 				answer4.setForeground(Color.WHITE);
 				answerGroup.add(answer4);
-				answer5 = new JRadioButton("                    5", false);
+				answer5 = new JRadioButton("									5", false);
+				answer5.setHorizontalTextPosition(SwingConstants.LEFT);
 				answer5.setForeground(Color.WHITE);
 				answerGroup.add(answer5);
+				answerListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			}
 			//answer.setFont(ANSWER_FONT);
 			answerOption.add(answer1);
@@ -201,12 +220,17 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 			answerOption.add(answer5);
 
 			//answer.setBackground(returnPanel.getBackground());
+			answerListPanel.add(QuestionText);
 			answerListPanel.add(answer1);
+			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
 			answerListPanel.add(answer2);
+			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
 			answerListPanel.add(answer3);
+			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
 			answerListPanel.add(answer4);
+			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
 			answerListPanel.add(answer5);
-
+			answerListPanel.add(Box.createRigidArea(new Dimension(500,0)));
 
 		}
 

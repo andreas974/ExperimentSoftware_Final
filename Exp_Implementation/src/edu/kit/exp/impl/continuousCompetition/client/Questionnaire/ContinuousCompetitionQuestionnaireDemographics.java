@@ -21,12 +21,21 @@ public class ContinuousCompetitionQuestionnaireDemographics extends Questionnair
 		this.setPreText("Klicken Sie \"Weiter\", um mit dem Fragebogen zu beginnen.");
 		this.setPostText("Sie haben die Fragen erfolgreich abgeschlossen.<br>Klicken Sie \"Weiter\", um das Experiment zu beenden.");*/
 
-			QuestionnaireLikert liker = new QuestionnaireLikert("Test Liker skale");
-			liker.addAnswer("                          ");
-			liker.addAnswer("                          ");
-			liker.addAnswer("                          ");
-			liker.addAnswer("                          ");
-			liker.addAnswer("                          ");
+			QuestionnaireLikert liker = new QuestionnaireLikert("Geben Sie an inwiefern Sie den folgenden Aussagen über sich selbst zustimmen.");
+			/*liker.addAnswer("Ich mag den Wettbewerb.                                                                                                ");
+			liker.addAnswer("Ich genieße es, gegen Andere anzutreten.                                                                       ");
+			liker.addAnswer("Im Wettbewerb zu verlieren, hat kaum Auswirkungen auf mich.                                     ");
+			liker.addAnswer("Ich bin jemand, der gerne gewinnt und es hasst zu verlieren.                                         ");
+			liker.addAnswer("Ich versuche oft, andere zu übertrumpfen.                                                                      ");
+			liker.addAnswer("Mein Ziel im Experiment war, besser als mein Gegenüber abzuschneiden.                     ");
+			liker.addAnswer("Mein Ziel im Experiment war, den höchstmöglichen Gesamtgewinn zu erzielen.            ");*/
+			liker.addAnswer("Ich mag den Wettbewerb.");
+			liker.addAnswer("Ich genieße es, gegen Andere anzutreten.");
+			liker.addAnswer("Im Wettbewerb zu verlieren, hat kaum Auswirkungen auf mich.");
+			liker.addAnswer("Ich bin jemand, der gerne gewinnt und es hasst zu verlieren.");
+			liker.addAnswer("Ich versuche oft, andere zu übertrumpfen.");
+			liker.addAnswer("Mein Ziel im Experiment war, besser als mein Gegenüber abzuschneiden.");
+			liker.addAnswer("Mein Ziel im Experiment war, den höchstmöglichen Gesamtgewinn zu erzielen.");
 			this.addQuestionnaireItem(liker);
 
 		QuestionnaireMultipleChoice question;
