@@ -66,6 +66,11 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
     protected double profitFirmC;
     protected double profitFirmD;
 
+    protected double DSSfirmA;
+    protected double DSSfirmB;
+
+
+    protected double maxDSS;
     protected double balanceFirmA;
     protected double balanceFirmB;
     protected double balanceFirmC;
@@ -97,7 +102,7 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
 
     protected void setupTreatmentConditions() {
         duration = 1800000;
-        updateTimeStep = 200;
+        updateTimeStep = 500;
         isTriopolyTreatment = true;
         isCournotTreatment = false;
         isDiscreteTreatment = false;
@@ -251,6 +256,8 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
                         int countId = actionUpdate.getCountId();
                         updateMarketActions(actionUpdate, senderClientId);
                         serverTime = actionUpdate.getLocalTime();
+                        DSSfirmA = actionUpdate.getDSSfirmA();
+                        DSSfirmB = actionUpdate.getDSSfirmB();
                         saveActionUpdateToDatabase(actionUpdate, senderClientId);
 
                         log4j.info("Received final actionUpdate with countId {} of cohort {}.", countId, getSubjectGroup().getIdSubjectGroup());
@@ -291,6 +298,9 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
                         int countId = actionUpdate.getCountId();
                         updateMarketActions(actionUpdate, senderClientId);
                         serverTime = actionUpdate.getLocalTime();
+                        DSSfirmA = actionUpdate.getDSSfirmA();
+                        DSSfirmB = actionUpdate.getDSSfirmB();
+
                         saveActionUpdateToDatabase(actionUpdate, senderClientId);
 
                         checkOfCountIds[countId] = checkOfCountIds[countId] + 1;
@@ -407,7 +417,6 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
 
     }
 
-
     private void savePayoffsToDatabase(Subject subject, FirmDescription firmDescription) {
         Trial trial = new Trial();
         trial.setSubjectGroup(this.getSubjectGroup());
@@ -427,9 +436,8 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
         }
     }
 
+
     private void saveMarketDataToDatabase(int countId) {
-
-
         Trial trial = new Trial();
         trial.setSubjectGroup(this.getSubjectGroup());
         trial.setServerTime(new Date().getTime());                  //Todo implement correct date format
@@ -438,7 +446,7 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
         trial.setValue(serverTime+ "," + countId + ",0," +
                         aFirmA + "," + aFirmB + "," + aFirmC + "," + aFirmD +  "," + aMarket + "," +
                         oFirmA + "," + oFirmB + "," + oFirmC + "," + oFirmD +  "," + oMarket + "," +
-                        profitFirmA + "," + profitFirmB + "," + profitFirmC + "," + profitFirmD
+                        profitFirmA + "," + profitFirmB + "," + profitFirmC + "," + profitFirmD + "," + DSSfirmA + "," + DSSfirmB
         );
 
         //trial.setSubject(humanBidder);
@@ -455,7 +463,6 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
         trial.setSubjectGroup(this.getSubjectGroup());
         trial.setServerTime(new Date().getTime());                  //Todo implement correct date format
         trial.setScreenName(this.getCurrentTreatment().getName());  //Todo why save treatment?
-
         for(Membership membership : memberships) {                  //Todo: more efficient way to retrieve subject based on clientId?
             Subject subject = membership.getSubject();
             if (subject.getIdClient().equals(senderClientId)) {
@@ -465,7 +472,7 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
 
         trial.setValueName("SRV_RCV_PRICE_UPDATE");
         trial.setValue(serverTime + "," + pu.getCountId() + "," + pu.getRoleCode()+ "," +
-                        aFirmA + "," + aFirmB + "," + aFirmC + "," + aFirmD
+                        aFirmA + "," + aFirmB + "," + aFirmC + "," + aFirmD + "," + DSSfirmA + "," + DSSfirmB
         );
 
         try {
@@ -484,20 +491,24 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
 
     private void updateMarketActions(ContinuousCompetitionResponseObject actionUpdate, String senderClientId) {
         log4j.trace("updateMarketActions() - start of execution");
+        double [] temp = new double[4];
 
         if ( senderClientId.equals(firmA.getIdClient()) ) {
             aFirmA = actionUpdate.getaFirmA();
             log4j.info("Receiving actionUpdate with countId {} from client {}: Set aFirmA = {}", actionUpdate.getCountId(), senderClientId, aFirmA);
+            temp[0] = actionUpdate.getDSSfirmA();
         }
 
         if  ( senderClientId.equals(firmB.getIdClient()) ) {
             aFirmB = actionUpdate.getaFirmB();
             log4j.info("Receiving actionUpdate with countId {} from client {}: Set aFirmB = {}", actionUpdate.getCountId(), senderClientId, aFirmB);
+            temp[1] = actionUpdate.getDSSfirmB();
         }
 
         if ( senderClientId.equals(firmC.getIdClient()) ) {
             aFirmC = actionUpdate.getaFirmC();
             log4j.info("Receiving actionUpdate with countId {} from client {}: Set aFirmC = {}", actionUpdate.getCountId(), senderClientId, aFirmC);
+
         }
 
         if ( senderClientId.equals(firmD.getIdClient()) ) {
@@ -542,6 +553,9 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
         profitFirmB = marketData.getProfitFirmB();
         profitFirmC = marketData.getProfitFirmC();
         profitFirmD = marketData.getProfitFirmD();
+        DSSfirmA = marketData.getDSSfirmA();
+        DSSfirmB = marketData.getDSSfirmB();
+
 
         log4j.info("After calculation of market data: actions - aFirmA: {}, aFirmB: {}, aFirmC: {}, aFirmD: {}, aMarket: {}.", aFirmA, aFirmB, aFirmC, aFirmD, aMarket);
         log4j.info("After calculation of market data: outputs - oFirmA: {}, oFirmB: {}, oFirmC: {}, oFirmD: {}.", oFirmA, oFirmB, oFirmC, oFirmD);
@@ -616,6 +630,9 @@ public class ContinuousCompetitionInstitution extends Institution<ContinuousComp
         marketUpdate.setProfitFirmB(profitFirmB);
         marketUpdate.setProfitFirmC(profitFirmC);
         marketUpdate.setProfitFirmD(profitFirmD);
+        marketUpdate.setDSSfirmA(DSSfirmA);
+        marketUpdate.setDSSfirmB(DSSfirmB);
+
 
         log4j.trace("calculateMarketData() - end of execution");
         return marketUpdate;

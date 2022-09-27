@@ -26,6 +26,10 @@ public class Timestamp {
     private double qFirmC;
     private double qFirmD;
 
+    private double DSSfirmA;
+    private double DSSfirmB;
+
+
     private double profitFirmA;
     private double profitFirmB;
     private double profitFirmC;
@@ -114,6 +118,14 @@ public class Timestamp {
         return profitFirmD;
     }
 
+    public double getDSSfirmA(){
+        return DSSfirmA;
+    }
+
+    public double getDSSfirmB(){
+        return DSSfirmB;
+    }
+
     public boolean isDiscrete() {
         return isDiscrete;
     }
@@ -166,6 +178,14 @@ public class Timestamp {
 
     public void setqFirmD(double qFirmD) {
         this.qFirmD = qFirmD;
+    }
+
+    public void setDSSfirmA(double DSSfirmA){
+        this.DSSfirmA = DSSfirmA;
+    }
+
+    public void setDSSfirmB(double DSSfirmB){
+        this.DSSfirmB = DSSfirmB;
     }
 
     public void setpMarket(double pMarket) {

@@ -22,6 +22,9 @@ public class ContinuousCompetitionResponseObject extends Screen.ResponseObject {
     private double aFirmC;
     private double aFirmD;
 
+    private double DSSfirmA;
+    private double DSSfirmB;
+
     private double balanceFirmA;
     private double balanceFirmB;
     private double balanceFirmC;
@@ -81,6 +84,14 @@ public class ContinuousCompetitionResponseObject extends Screen.ResponseObject {
         this.clientFinished = clientFinished;
     }
 
+    public void setDSSfirmA(double DSSfirmA){
+        this.DSSfirmA = DSSfirmA;
+    }
+
+    public void setDSSfirmB(double DSSfirmB){
+        this.DSSfirmB = DSSfirmB;
+    }
+
 
     // Getter methods
 
@@ -114,6 +125,14 @@ public class ContinuousCompetitionResponseObject extends Screen.ResponseObject {
 
     public double getaFirmD() {
         return aFirmD;
+    }
+
+    public double getDSSfirmA(){
+        return DSSfirmA;
+    }
+
+    public double getDSSfirmB(){
+        return DSSfirmB;
     }
 
     public int getCountId() {

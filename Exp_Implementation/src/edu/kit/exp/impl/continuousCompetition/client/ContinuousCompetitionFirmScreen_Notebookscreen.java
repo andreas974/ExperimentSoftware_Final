@@ -60,6 +60,8 @@ public class ContinuousCompetitionFirmScreen_Notebookscreen extends Screen {
     protected double qFirmB;
     protected double qFirmC;
 
+    protected double DSS;
+
     protected double pMarket;
     protected double qMarket;
 
@@ -527,7 +529,7 @@ public class ContinuousCompetitionFirmScreen_Notebookscreen extends Screen {
 
     public void calculateDiscreteRoundMarketData() {
 
-        ContinuousCompetitionParamObject practiceMarketUpdate = marketDataCalculator.calculateMarketData(pFirmA, pFirmB, pFirmC);
+        ContinuousCompetitionParamObject practiceMarketUpdate = marketDataCalculator.calculateMarketData(pFirmA, pFirmB, pFirmC, DSS);
         practiceMarketUpdate.setGlobalTime(localTime);
 
         updateStateOfLocalVariables(practiceMarketUpdate);

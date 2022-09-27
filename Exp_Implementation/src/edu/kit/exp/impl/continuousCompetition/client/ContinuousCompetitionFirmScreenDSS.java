@@ -62,7 +62,6 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
     protected double qFirmB;
     protected double qFirmC;
 
-    protected int pDS;
 
     protected double pMarket;
     protected double qMarket;
@@ -73,6 +72,9 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
     protected double profitFirmA;
     protected double profitFirmB;
     protected double profitFirmC;
+
+    protected double DSSfirmA;
+    protected double DSSfirmB;
     protected boolean firmAOutOfMarket = false;
     protected boolean firmBOutOfMarket = false;
     protected boolean FirmCOutOfMarket = false;
@@ -311,6 +313,15 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
             // Convert parameter Object in market update and keep track of latest market update
             ContinuousCompetitionParamObject marketUpdate = (ContinuousCompetitionParamObject) paramObject;
             latestMarketUpdate = marketUpdate;
+            if (myRole == FirmDescription.FirmA){
+                DSSfirmA = getMaxActionIndex(getState(latestMarketUpdate))*5;
+            }
+            else if (myRole == FirmDescription.FirmB){
+                DSSfirmB = getMaxActionIndex(getState(latestMarketUpdate))*5;
+            }
+
+            System.out.println("Marketupdate: FirmA" + DSSfirmA);
+            System.out.println("Marketupdate: FirmA" + DSSfirmA);
 
             log4j.info("Recipient {} received MarketUpdate with countId {} and globalTime {} in cohort {}", subject.getIdClient(), marketUpdate.getCountId(), marketUpdate.getGlobalTime(), subjectGroup.getIdSubjectGroup());
             log4j.info("Updating local market variables: pFirmA: {} pFirmB: {}, pFirmC: {}, pMarket: {}", marketUpdate.getaFirmA(), marketUpdate.getaFirmB(), marketUpdate.getaFirmC(), marketUpdate.getaMarket());
@@ -341,6 +352,7 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
             log4j.fatal("Error: paramObject is not instance of UpstreamCompetitionParamObject");
         }
         log4j.trace("processParamObjectUpdate(): end of execution");
+
     }
 
 
@@ -354,6 +366,8 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
         priceUpdate.setCountId(countId);
         priceUpdate.setLocalTime(localTime);
         priceUpdate.setRoleCode(myRoleCode);
+        priceUpdate.setDSSfirmA(DSSfirmA);
+        priceUpdate.setDSSfirmB(DSSfirmB);
 
         if (practiceRound) { priceUpdate.setPracticeRoundFinished(true);
         }
@@ -361,10 +375,12 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
 
         if (myRole == FirmDescription.FirmA) {
             priceUpdate.setaFirmA(pFirmA);
+            priceUpdate.setDSSfirmA(DSSfirmA);
             log4j.info("Firm A: Sending priceUpdate with countId {} and time {} in round {} - pFirmA: {}.", countId, localTime, (localTime/timeStep), pFirmA);
         } else {
             if (myRole == FirmDescription.FirmB) {
                 priceUpdate.setaFirmB(pFirmB);
+                priceUpdate.setDSSfirmB(DSSfirmB);
                 priceUpdate.setBalanceFirmB(balanceFirmB);
                 log4j.info("Firm B: Sending priceUpdate with countId {} and time {} in round {} - pFirmB: {}.", countId, localTime, (localTime/timeStep), pFirmB);
             } else {
@@ -708,7 +724,7 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
         return actionsofotherfirm;
     }
 
-    private int getState(ContinuousCompetitionParamObject marketUpdate) {
+    public int getState(ContinuousCompetitionParamObject marketUpdate) {
         int result = 0;
         if (isTriopolyTreatment == false) {
             if (myRole == FirmDescription.FirmA) {
@@ -720,7 +736,7 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
         return result;
     }
 
-    protected int getMaxActionIndex(int state) {
+    public int getMaxActionIndex(int state) {
         double value;
         double maxValue = 0;
         int maxIndex = 0;
@@ -920,6 +936,9 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
         ts.setProfitFirmA(profitFirmA);
         ts.setProfitFirmB(profitFirmB);
         ts.setProfitFirmC(profitFirmC);
+        ts.setDSSfirmA(DSSfirmA);
+        ts.setDSSfirmB(DSSfirmB);
+
     }
 
     private void updateBalanceDataAndGUI(ContinuousCompetitionParamObject marketUpdate) {

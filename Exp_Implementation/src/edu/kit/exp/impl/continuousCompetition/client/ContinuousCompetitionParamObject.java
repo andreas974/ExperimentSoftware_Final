@@ -52,6 +52,8 @@ public class ContinuousCompetitionParamObject extends ParamObject {
     private double profitFirmC;
     private double profitFirmD;
 
+    private double DSSfirmA;
+    private double DSSfirmB;
     private double balanceFirmA;
     private double balanceFirmB;
     private double balanceFirmC;
@@ -152,6 +154,14 @@ public class ContinuousCompetitionParamObject extends ParamObject {
 
     public void setProfitFirmD(double profitFirmD) {
         this.profitFirmD = profitFirmD;
+    }
+
+    public void setDSSfirmA(double DSSfirmA){
+        this.DSSfirmA = DSSfirmA;
+    }
+
+    public void setDSSfirmB(double DSSfirmB){
+        this.DSSfirmB = DSSfirmB;
     }
 
     public void setStatusMsg(String statusMsg) {
@@ -294,6 +304,14 @@ public class ContinuousCompetitionParamObject extends ParamObject {
 
     public double getProfitFirmD() {
         return (profitFirmD*COEFFICIENT_PROFITS);
+    }
+
+    public double getDSSfirmA(){
+        return DSSfirmA;
+    }
+
+    public double getDSSfirmB(){
+        return DSSfirmB;
     }
 
     public Boolean getStartFlag() {
