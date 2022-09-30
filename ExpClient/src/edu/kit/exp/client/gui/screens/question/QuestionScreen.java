@@ -380,12 +380,12 @@ public abstract class QuestionScreen extends Screen{
 		answerPanel.setBackground(Color.WHITE);
 		answerPanel.setLayout(new BorderLayout(0, 0));
 		answerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		//answerPanel.setPreferredSize(new Dimension(500, 200));
-		answerPanel.setPreferredSize(new Dimension(1000, 400));
+		answerPanel.setPreferredSize(new Dimension(800, 300));
+		//answerPanel.setPreferredSize(new Dimension(1000, 400));
 		//answerPanel.setMaximumSize(answerPanel.getPreferredSize());
-		answerPanel.setMaximumSize(new Dimension(5000,1000));
-		answerPanel.setMinimumSize(new Dimension(1080,1000));
-		//answerPanel.setMinimumSize(answerPanel.getPreferredSize());
+		answerPanel.setMaximumSize(new Dimension(1200,1000));
+		//answerPanel.setMinimumSize(new Dimension(1080,1000));
+		answerPanel.setMinimumSize(answerPanel.getPreferredSize());
 		answerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		answerPanel.revalidate();
 		answerPanel.repaint();

@@ -22,6 +22,7 @@ public class ContinuousCompetitionQuestionnaireDemographics extends Questionnair
 		this.setPostText("Sie haben die Fragen erfolgreich abgeschlossen.<br>Klicken Sie \"Weiter\", um das Experiment zu beenden.");*/
 
 			QuestionnaireLikert liker = new QuestionnaireLikert("Geben Sie an inwiefern Sie den folgenden Aussagen über sich selbst zustimmen.");
+			//<br><i><br>1... Ich stimme überhaupt nicht zu<br>2... Ich stimme eher nicht zu</i>");
 			/*liker.addAnswer("Ich mag den Wettbewerb.                                                                                                ");
 			liker.addAnswer("Ich genieße es, gegen Andere anzutreten.                                                                       ");
 			liker.addAnswer("Im Wettbewerb zu verlieren, hat kaum Auswirkungen auf mich.                                     ");

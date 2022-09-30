@@ -1,6 +1,7 @@
 package edu.kit.exp.client.gui.screens.question.questionnaire;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -14,23 +15,34 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 
 	private static final Font ANSWER_FONT = new Font("Tahoma", Font.PLAIN, 17);
 	public static final Dimension PREFERRED_SIZE = new Dimension(300, 200);
-	public static final Dimension textsize = new Dimension(300, 15);
+	public static final Dimension textsize = new Dimension(500, 15);
 
 	public static final String SPLIT_SIGN = ";";
 
-	/** The answer text. */
+	/**
+	 * The answer text.
+	 */
 	private ArrayList<String> answerText;
 
-	/** The answer text. */
+	/**
+	 * The answer text.
+	 */
 	private ArrayList<String> questionText;
 
-	/** The answer option. */
+	/**
+	 * The answer option.
+	 */
 	private ArrayList<AbstractButton> answerOption;
 
-	/** Indicates whether multiple answers where selected. */
+
+	/**
+	 * Indicates whether multiple answers where selected.
+	 */
 	private boolean selectMultiple;
 
 	private ArrayList<String> Text;
+
+	private ArrayList<JTextArea> questions;
 
 	/**
 	 * This method checks if multiple answers can be selected.
@@ -45,9 +57,8 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 	 * This method sets a true or false value that indicates whether multiple
 	 * answers can be selected in a quiz.
 	 *
-	 * @param selectMultiple
-	 *            A boolean which regulates whether multiple or just one answer
-	 *            can be selected.
+	 * @param selectMultiple A boolean which regulates whether multiple or just one answer
+	 *                       can be selected.
 	 */
 	public void setSelectMultiple(boolean selectMultiple) {
 		this.selectMultiple = selectMultiple;
@@ -56,9 +67,8 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 	/**
 	 * This constructor instantiates a new multiple choice quiz item.
 	 *
-	 * @param question
-	 *            A String which contains the question that will be displayed to
-	 *            the client.
+	 * @param question A String which contains the question that will be displayed to
+	 *                 the client.
 	 */
 	public QuestionnaireLikert(String question) {
 		super(question);
@@ -72,14 +82,13 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 	 * This method provides the experimenter with the option to add possible
 	 * answers for the question.
 	 *
-	 * @param text
-	 *            A String which contains the client answer.
+	 * @param text A String which contains the client answer.
 	 */
 	public void addAnswer(String text) {
 		answerText.add(text);
 	}
 
-	public void addQuestion(String text){
+	public void addQuestion(String text) {
 		questionText.add(text);
 	}
 
@@ -90,70 +99,52 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 
 	@Override
 	public JPanel getAnswerPanel() {
-		this.basePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		JPanel basePanel = new JPanel();
+		//basePanel.setLayout(new GridLayout(2,2));
+		basePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		basePanel.setBackground(Color.white);
 		JPanel returnPanel = basePanel;
 		returnPanel.setLayout(new BoxLayout(basePanel, BoxLayout.Y_AXIS));
-		returnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		returnPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
+		int i = 0;
+		for (String anAnswerText : answerText) {
+			i++;
+		}
+		////GridBagConstraints c = new GridBagConstraints();
+		returnPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		Border blackline;
+		blackline = BorderFactory.createLineBorder(Color.black);
 
 		JPanel textpanel = new JPanel();
 		returnPanel.add(textpanel);
-		textpanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//textpanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		textpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		textpanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		textpanel.setBackground(returnPanel.getBackground());
 		textpanel.setPreferredSize(textsize);
-		JTextArea text = new JTextArea();
-		text.insert("                                                                                                                           Ich stimme voll und ganz zu            Ich stimme zu            Ich stimme weder zu noch lehne ab            Ich stimme nicht zu            Ich stimme überhaupt nicht zu", 0);
-		textpanel.add(text);
-
-
-
-
-		/*answerOption = new ArrayList<>();
-		AbstractButton answer1;
-		AbstractButton answer2;
-		AbstractButton answer3;
-		AbstractButton answer4;
-		AbstractButton answer5;
-		ButtonGroup answerGroup = new ButtonGroup();
-		//javax.swing.ButtonGroup[] answerGroup = new ButtonGroup[1];
-			for (String aQuestionText : questionText) {
-				if (selectMultiple) {
-					answer1 = new JCheckBox("<html><br></html>" + aQuestionText, false);
-					answer2 = new JCheckBox("", false);
-					answer3 = new JCheckBox("", false);
-					answer4 = new JCheckBox("", false);
-					answer5 = new JCheckBox("", false);
-				} else {
-					answer1 = new JRadioButton("<html><br></html>" + aQuestionText, false);
-					answer1.setHorizontalTextPosition(SwingConstants.LEFT);
-					answerGroup.add(answer1);
-					answer2 = new JRadioButton("", false);
-					answerGroup.add(answer2);
-					answer3 = new JRadioButton("", false);
-					answerGroup.add(answer3);
-					answer4 = new JRadioButton("", false);
-					answerGroup.add(answer4);
-					answer5 = new JRadioButton("", false);
-					answerGroup.add(answer5);
-				}
-				//answer.setFont(ANSWER_FONT);
-				answerOption.add(answer1);
-				answerOption.add(answer2);
-				answerOption.add(answer3);
-				answerOption.add(answer4);
-				answerOption.add(answer5);
-
-				//answer.setBackground(returnPanel.getBackground());
-				answerListPanel.add(answer1);
-				answerListPanel.add(answer2);
-				answerListPanel.add(answer3);
-				answerListPanel.add(answer4);
-				answerListPanel.add(answer5);
-
-
-			}*/
-
+		//textpanel.setLayout(new GridLayout(1,6));
+		textpanel.setLayout(new GridBagLayout());
+		GridBagConstraints f = new GridBagConstraints();
+		JTextArea text01 = new JTextArea();
+		JTextArea text02 = new JTextArea();
+		JTextArea text03 = new JTextArea();
+		JTextArea text04 = new JTextArea();
+		JTextArea text05 = new JTextArea();
+		//text.insert("                                                                                                                           Ich stimme voll und ganz zu            Ich stimme zu            Ich stimme weder zu noch lehne ab            Ich stimme nicht zu            Ich stimme überhaupt nicht zu", 0);
+		text01.insert("1... Ich stimme voll und ganz zu,  ", 0);
+		text02.insert("2... Ich stimme zu,  ", 0);
+		text03.insert("3... Ich stimme weder zu noch lehne ab,  ", 0);
+		text04.insert("4... Ich Ich stimme nicht zu,  ", 0);
+		text05.insert("5... Ich stimme überhaupt nicht zu,  ", 0);
+		textpanel.add(text01);
+		f.gridx = 6;
+		textpanel.add(text02);
+		f.gridx = 7;
+		textpanel.add(text03);
+		f.gridx = 8;
+		textpanel.add(text04);
+		f.gridx = 9;
+		textpanel.add(text05);
+		f.gridx = 10;
 
 		answerOption = new ArrayList<>();
 		AbstractButton answer1;
@@ -163,88 +154,153 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 		AbstractButton answer5;
 		JTextArea QuestionText;
 
+		JPanel answerListPanel = new JPanel();
+		answerListPanel.setLayout(new GridBagLayout());
+		GridBagConstraints d = new GridBagConstraints();
+
+		JTextArea text1 = new JTextArea("  1");
+		d.gridx = 1;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text1, d);
+
+		JTextArea text2 = new JTextArea("  2");
+		d.gridx = 2;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text2, d);
+
+		JTextArea text3 = new JTextArea("  3");
+		d.gridx = 3;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text3, d);
+
+		JTextArea text4 = new JTextArea("  4");
+		d.gridx = 4;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text4, d);
+
+		JTextArea text5 = new JTextArea("  5");
+		d.gridx = 5;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text5, d);
+
 		//ButtonGroup answerGroup = new ButtonGroup();
-
+		int j = 1;
 		for (String anAnswerText : answerText) {
-			JPanel answerListPanel = new JPanel();
-			returnPanel.add(answerListPanel);
-			answerListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			answerListPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
-			answerListPanel.setBackground(returnPanel.getBackground());
-			answerListPanel.setLayout(new BoxLayout(answerListPanel, BoxLayout.X_AXIS));
-			answerListPanel.setPreferredSize(PREFERRED_SIZE);
 
-			answerListPanel.setMaximumSize(new Dimension(1500,3000));
-			answerListPanel.setPreferredSize(new Dimension(500,3000));
+			System.out.println(anAnswerText + ". j: " + j);
 			ButtonGroup answerGroup = new ButtonGroup();
 			QuestionText = new JTextArea(anAnswerText);
+			QuestionText.setAlignmentX(0);
+			d.gridx = 0;
+			d.gridy = j;
+			d.anchor = GridBagConstraints.WEST;
+			//questions.add(QuestionText);
 
-			QuestionText.setMinimumSize(new Dimension(600,20));
-			QuestionText.setMaximumSize(new Dimension(600,20));
+			answerListPanel.add(QuestionText, d);
+
+			answerListPanel.setBackground(returnPanel.getBackground());
 
 			if (selectMultiple) {
-				answer1 = new JCheckBox("" + anAnswerText, false);
-				answer1.setHorizontalAlignment(JCheckBox.LEFT);
-				answer2 = new JCheckBox("", false);
-				answer3 = new JCheckBox("", false);
-				answer4 = new JCheckBox("", false);
-				answer5 = new JCheckBox("", false);
+				answer1 = new JCheckBox("      ", false);
+				answer2 = new JCheckBox("      ", false);
+				answer3 = new JCheckBox("      ", false);
+				answer4 = new JCheckBox("      ", false);
+				answer5 = new JCheckBox("      ", false);
 			} else {
-				answer1 = new JRadioButton("									1", false);
+				answer1 = new JRadioButton("1", false);
+				//answer1.setAlignmentX(Component.CENTER_ALIGNMENT);
 				answer1.setForeground(Color.WHITE);
-				answer1.setHorizontalTextPosition(SwingConstants.LEFT);
+				answer1.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer1.setVerticalTextPosition(SwingConstants.TOP);
+				d.gridx = 1;
+				d.gridy = j;
 				answerGroup.add(answer1);
-				answer2 = new JRadioButton("									2", false);
-				answer2.setHorizontalTextPosition(SwingConstants.LEFT);
+				answerListPanel.add(answer1, d);
+				answer2 = new JRadioButton("2", false);
+				answer2.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer2.setVerticalTextPosition(SwingConstants.TOP);
 				answer2.setForeground(Color.WHITE);
 				answerGroup.add(answer2);
-				answer3 = new JRadioButton("									3", false);
-				answer3.setHorizontalTextPosition(SwingConstants.LEFT);
+				d.gridx = 2;
+				d.gridy = j;
+				answerListPanel.add(answer2, d);
+				answer3 = new JRadioButton("3", false);
+				answer3.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer3.setVerticalTextPosition(SwingConstants.TOP);
 				answer3.setForeground(Color.WHITE);
 				answerGroup.add(answer3);
-				answer4 = new JRadioButton("									4", false);
-				answer4.setHorizontalTextPosition(SwingConstants.LEFT);
+				d.gridx = 3;
+				d.gridy = j;
+				answerListPanel.add(answer3, d);
+				answer4 = new JRadioButton("4", false);
+				answer4.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer4.setVerticalTextPosition(SwingConstants.TOP);
 				answer4.setForeground(Color.WHITE);
 				answerGroup.add(answer4);
-				answer5 = new JRadioButton("									5", false);
-				answer5.setHorizontalTextPosition(SwingConstants.LEFT);
+				d.gridx = 4;
+				d.gridy = j;
+				answerListPanel.add(answer4, d);
+				answer5 = new JRadioButton("5", false);
+				answer5.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer5.setVerticalTextPosition(SwingConstants.TOP);
 				answer5.setForeground(Color.WHITE);
 				answerGroup.add(answer5);
+				d.gridx = 5;
+				d.gridy = j;
+				answerListPanel.add(answer5, d);
 				answerListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			}
 			//answer.setFont(ANSWER_FONT);
+			//questions.add(QuestionText);
 			answerOption.add(answer1);
 			answerOption.add(answer2);
 			answerOption.add(answer3);
 			answerOption.add(answer4);
 			answerOption.add(answer5);
 
-			//answer.setBackground(returnPanel.getBackground());
-			answerListPanel.add(QuestionText);
-			answerListPanel.add(answer1);
-			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
-			answerListPanel.add(answer2);
-			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
-			answerListPanel.add(answer3);
-			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
-			answerListPanel.add(answer4);
-			answerListPanel.add(Box.createRigidArea(new Dimension(50,0)));
-			answerListPanel.add(answer5);
-			answerListPanel.add(Box.createRigidArea(new Dimension(500,0)));
+			answerListPanel.setAlignmentX(returnPanel.LEFT_ALIGNMENT);
+			returnPanel.add(answerListPanel);
 
+			j++;
 		}
 
-
-
-
-
+		/*JTextArea options1 = new JTextArea("1..." + "Ich stimme voll und ganz zu");
+		JTextArea options2 = new JTextArea("2..." + "Ich stimme zu");
+		JTextArea options3 = new JTextArea("3..." + "Ich stimme weder zu noch lehne ab");
+		JTextArea options4 = new JTextArea("4..."+"Ich Ich stimme nicht zu");
+		JTextArea options5 = new JTextArea("5..."+"Ich stimme überhaupt nicht zu");
+		//options.setText("1..." + "Ich stimme voll und ganz zu" + "2..." + "Ich stimme zu" + "3..." + "Ich stimme weder zu noch lehne ab" + "4..."+"Ich Ich stimme nicht zu" + "5..."+"Ich stimme überhaupt nicht zu");
+		d.gridy = 7;
+		d.gridwidth = 5;
+		basePanel.add(options1, d);
+		basePanel.add(options2, d);
+		basePanel.add(options3, d);
+		basePanel.add(options4, d);
+		basePanel.add(options5, d);*/
+		returnPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		return returnPanel;
 	}
 
+
 	@Override
 	public boolean isValid() {
+		int i = 0;
+		for (String anAnswerText : answerText) {
+			i++;
+		}
+		int j=0;
 		for (AbstractButton anAnswerOption : answerOption) {
 			if (anAnswerOption.isSelected()) {
+				j++;
+			}
+		}
+		for (AbstractButton anAnswerOption : answerOption) {
+			if (anAnswerOption.isSelected() && i==j) {
 				return true;
 			}
 		}
