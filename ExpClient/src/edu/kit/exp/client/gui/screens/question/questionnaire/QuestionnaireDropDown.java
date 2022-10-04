@@ -71,7 +71,7 @@ public class QuestionnaireDropDown extends QuestionnaireItem {
 	@Override
 	public boolean isValid() {
 		String inputText = (String) answer.getItemAt(answer.getSelectedIndex());
-		return (inputText.isEmpty() == false && inputText != "Bitte auswählen...");
+		return (inputText.isEmpty() == false && inputText != "Bitte auswählen..." && inputText != "---");
 	}
 
 	@Override
