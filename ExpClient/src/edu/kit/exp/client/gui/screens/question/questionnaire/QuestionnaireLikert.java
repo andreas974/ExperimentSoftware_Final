@@ -152,6 +152,8 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 		AbstractButton answer3;
 		AbstractButton answer4;
 		AbstractButton answer5;
+		AbstractButton answer6;
+		AbstractButton answer7;
 		JTextArea QuestionText;
 
 		JPanel answerListPanel = new JPanel();
@@ -188,6 +190,18 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 		d.anchor = GridBagConstraints.WEST;
 		answerListPanel.add(text5, d);
 
+		JTextArea text6 = new JTextArea("  6");
+		d.gridx = 6;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text6, d);
+
+		JTextArea text7 = new JTextArea("  7");
+		d.gridx = 7;
+		d.gridy = 0;
+		d.anchor = GridBagConstraints.WEST;
+		answerListPanel.add(text7, d);
+
 		//ButtonGroup answerGroup = new ButtonGroup();
 		int j = 1;
 		for (String anAnswerText : answerText) {
@@ -211,6 +225,8 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 				answer3 = new JCheckBox("      ", false);
 				answer4 = new JCheckBox("      ", false);
 				answer5 = new JCheckBox("      ", false);
+				answer6 = new JCheckBox("      ", false);
+				answer7 = new JCheckBox("      ", false);
 			} else {
 				answer1 = new JRadioButton("1", false);
 				//answer1.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -253,6 +269,22 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 				d.gridx = 5;
 				d.gridy = j;
 				answerListPanel.add(answer5, d);
+				answer6 = new JRadioButton("6", false);
+				answer6.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer6.setVerticalTextPosition(SwingConstants.TOP);
+				answer6.setForeground(Color.WHITE);
+				answerGroup.add(answer6);
+				d.gridx = 6;
+				d.gridy = j;
+				answerListPanel.add(answer6, d);
+				answer7 = new JRadioButton("7", false);
+				answer7.setHorizontalTextPosition(SwingConstants.RIGHT);
+				answer7.setVerticalTextPosition(SwingConstants.TOP);
+				answer7.setForeground(Color.WHITE);
+				answerGroup.add(answer7);
+				d.gridx = 7;
+				d.gridy = j;
+				answerListPanel.add(answer7, d);
 				answerListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			}
 			//answer.setFont(ANSWER_FONT);
@@ -262,6 +294,8 @@ public class QuestionnaireLikert extends QuestionnaireItem {
 			answerOption.add(answer3);
 			answerOption.add(answer4);
 			answerOption.add(answer5);
+			answerOption.add(answer6);
+			answerOption.add(answer7);
 
 			answerListPanel.setAlignmentX(returnPanel.LEFT_ALIGNMENT);
 			returnPanel.add(answerListPanel);

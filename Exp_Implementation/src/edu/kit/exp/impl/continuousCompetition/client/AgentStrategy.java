@@ -244,7 +244,6 @@ public class AgentStrategy {
                 int randomUpdate = random.nextInt(6 + 1) + 1;
                 Thread.sleep(randomUpdate*500);
                 agentCore.updateAction(newAction);
-                System.out.println("RandomUpdate" + randomUpdate*500);
 
                 log4j.info("Updated action to {}", newAction);
             } else

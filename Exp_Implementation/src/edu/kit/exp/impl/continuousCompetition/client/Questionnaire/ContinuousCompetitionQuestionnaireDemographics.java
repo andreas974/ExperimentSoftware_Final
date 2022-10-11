@@ -16,10 +16,9 @@ public class ContinuousCompetitionQuestionnaireDemographics extends Questionnair
 
 		public ContinuousCompetitionQuestionnaireDemographics(String gameId, ParamObject parameter, String screenId, Long showUpTime) {
 		super(gameId, parameter, screenId, showUpTime);
-
-			/*this.setTitleText("Zusätzlicher Fragebogen");
-			this.setPreText("Klicken Sie \"Weiter\", um mit dem Fragebogen zu beginnen.");
-			this.setPostText("Sie haben die Fragen erfolgreich abgeschlossen.<br>Klicken Sie \"Weiter\", um das Experiment zu beenden.");*/
+			this.setTitleText("Persönliche Angaben");
+			this.setPreText("Klicken Sie \"Weiter\", um mit dem Fragebogen zu persönlichen Angaben fortzufahren.");
+			this.setPostText("Sie haben die Fragen erfolgreich abgeschlossen.<br>Klicken Sie \"Weiter\", um mit dem Fragebogen zu Ihrem Verhalten im Experiment fortzufahren.");
 
 			QuestionnaireMultipleChoice question;
 			question = new QuestionnaireMultipleChoice("Welches Geschlecht haben Sie?");
