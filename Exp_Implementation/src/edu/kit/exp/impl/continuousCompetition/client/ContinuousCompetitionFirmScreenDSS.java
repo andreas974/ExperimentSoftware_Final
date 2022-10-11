@@ -1447,13 +1447,15 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
         c.gridy = 0;
         decisionSupportPanel.add(DecisionSupportLabel, c);
 
-        DecisionSupportValueLabel = createNewRightSideValueLabel(Color.orange);
+        //DecisionSupportValueLabel = createNewRightSideValueLabel(Color.orange);
+        DecisionSupportValueLabel = createNewRightSideValueLabel(COLOR_FIRM_E);
         c = gbcValueColumn(c, pady);
         c.gridx = 1;
         c.gridy = 0;
         decisionSupportPanel.add(DecisionSupportValueLabel, c);
 
-        DecisionSupportUnitLabel = createNewRightSideUnitLabel(Color.orange);
+        //DecisionSupportUnitLabel = createNewRightSideUnitLabel(Color.orange);
+        DecisionSupportUnitLabel = createNewRightSideUnitLabel(COLOR_FIRM_E);
         DecisionSupportUnitLabel.setText("");
         c = gbcUnitColumn(c, pady);
         c.gridx = 2;
@@ -1948,7 +1950,7 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
     }
 
     private JLabel createNewDecisionSupportLabel() {
-        JLabel label = createNewRightSideDescriptionLabel(Color.black);
+        JLabel label = createNewRightSideDescriptionLabel(COLOR_FIRM_E);
         label.setText("Empfehlung des Algorithmus:");
         return label;
     }
