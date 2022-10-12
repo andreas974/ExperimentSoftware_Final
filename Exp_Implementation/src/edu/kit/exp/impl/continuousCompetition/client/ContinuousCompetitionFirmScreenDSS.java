@@ -320,9 +320,6 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
                 DSSfirmB = getMaxActionIndex(getState(latestMarketUpdate))*5;
             }
 
-            System.out.println("Marketupdate: FirmA" + DSSfirmA);
-            System.out.println("Marketupdate: FirmA" + DSSfirmA);
-
             log4j.info("Recipient {} received MarketUpdate with countId {} and globalTime {} in cohort {}", subject.getIdClient(), marketUpdate.getCountId(), marketUpdate.getGlobalTime(), subjectGroup.getIdSubjectGroup());
             log4j.info("Updating local market variables: pFirmA: {} pFirmB: {}, pFirmC: {}, pMarket: {}", marketUpdate.getaFirmA(), marketUpdate.getaFirmB(), marketUpdate.getaFirmC(), marketUpdate.getaMarket());
 
@@ -776,16 +773,18 @@ public class ContinuousCompetitionFirmScreenDSS extends Screen {
 
     private void initQlearning () {
         String path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";        //Here: Q-Learning for Decision Support:
+        path = "QMatrix_final_with1.0_FirmA.csv";
         if (myRole == FirmDescription.FirmA) {
             //AverageMatrix
             //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix21Avg.csv";
             //Max Matrix:
-            path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmA.csv";
-            //path = "QMatrix_final_with1.0_FirmA.csv";
+            //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmA.csv";
+            path = "QMatrix_final_with1.0_FirmA.csv";
             //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrixfull_reduced_with0.998.csv";
         }
         else if (myRole == FirmDescription.FirmB){
-            path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";
+            //path = "ExpCommon/src/edu/kit/exp/common/resources/QMatrix_final_with1.0_FirmB.csv";
+            path = "QMatrix_final_with1.0_FirmB.csv";
         }
 
         //Reduced QMatrix

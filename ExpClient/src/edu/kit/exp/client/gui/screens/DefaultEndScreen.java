@@ -27,7 +27,7 @@ public class DefaultEndScreen extends Screen {
 		 */
 		private static final long serialVersionUID = -48934262002502235L;
 
-		private static final String DEFAULT_SCREEN_MESSAGE = "<html><body><h1>End of the experimental session!</h1>Thank you!</body></html>";
+		private static final String DEFAULT_SCREEN_MESSAGE = "<html><body><h1>Ende des Experiments!</h1>Vielen Dank für Ihre Teilnahme!</body></html>";
 
 		/** The message. */
 		private String message = DEFAULT_SCREEN_MESSAGE;
