@@ -79,6 +79,9 @@ public class ContinuousCompetitionQuestionnaireCompetition extends Questionnaire
 		liker.addAnswer("Ich habe mich lebendig verhalten.");
 		liker.addAnswer("Ich habe mich beweglich verhalten.");
 		liker.addAnswer("Ich habe mich künstlich verhalten.");
+		this.addQuestionnaireItem(liker);
+
+		liker = new QuestionnaireLikert("Geben Sie an inwiefern Sie den folgenden Aussagen über Ihr eigenes Verhalten im Experiment zustimmen.");
 		liker.addAnswer("Ich habe mich gewöhnlich verhalten.");
 		liker.addAnswer("Ich habe mich kreativ verhalten.");
 		liker.addAnswer("Ich habe mich für meinen Gegenüber nachvollziehbar verhalten.");
@@ -99,6 +102,9 @@ public class ContinuousCompetitionQuestionnaireCompetition extends Questionnaire
 		liker.addAnswer("Mein Gegenüber hat sich angenehm verhalten.");
 		liker.addAnswer("Mein Gegenüber hat sich lebendig verhalten.");
 		liker.addAnswer("Mein Gegenüber hat sich beweglich verhalten.");
+		this.addQuestionnaireItem(liker);
+
+		liker = new QuestionnaireLikert("Geben Sie an inwiefern Sie den folgenden Aussagen über das Verhalten Ihres Gegenüber im Experiment zustimmen.");
 		liker.addAnswer("Mein Gegenüber hat sich künstlich verhalten.");
 		liker.addAnswer("Mein Gegenüber hat sich gewöhnlich verhalten.");
 		liker.addAnswer("Mein Gegenüber hat sich kreativ verhalten.");
@@ -110,5 +116,6 @@ public class ContinuousCompetitionQuestionnaireCompetition extends Questionnaire
 		liker.addAnswer("Das Verhalten meines Gegenübers war vertrauenswürdig.");
 		liker.addAnswer("Das Verhalten meines Gegenübers war glaubwürdig.");
 		this.addQuestionnaireItem(liker);
+
 	}
 }
